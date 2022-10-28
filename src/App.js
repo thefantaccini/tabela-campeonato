@@ -1,25 +1,29 @@
+import React, { useState, useEffect, Fragment } from 'react'
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [configs, setConfigs] = useState([]);
+    const [grupos, setGrupos] = useState([]);
+    const [times, setTimes] = useState([]);
+
+    async function getData() {
+        let response = await fetch("http://localhost:3000/data/data.json")
+        let data = await response.json()
+        return data
+    }
+
+    useEffect(() => {
+        getData().then(data => {
+            setConfigs(data["configs"])
+            setGrupos(data["grupos"])
+            setTimes(data["times"])
+        })
+    }, []) //Ocorre apenas na inicialização
+
+
+  return null
 }
 
 export default App;

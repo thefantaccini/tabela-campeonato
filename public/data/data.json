@@ -1,0 +1,34 @@
+{
+    "configs": {
+    "numDeTimes": 8,
+    "numDeGrupos": 4,
+    "classificadosPorGrupo": 2
+  },
+    "grupos": [
+      {
+        "id": 0,
+        "times": [ 0, 1, 2, 3 ]
+      },
+      {
+        "id": 1,
+        "times": [ 0, 1, 2, 3 ]
+      },
+      {
+        "id": 2,
+        "times": [ 0, 1, 2, 3 ]
+      }
+    ],
+    "times": [
+      {
+        "id": 0,
+        "nome do time": "Time 1",
+        "grupo": 0,
+        "pontos": 0,
+        "vitorias": 0,
+        "empates": 0,
+        "derrotas": 0,
+        "gols-pro": 0,
+        "saldo": 0
+      }
+    ]
+  }
