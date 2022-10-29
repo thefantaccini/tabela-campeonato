@@ -1,8 +1,8 @@
 {
     "configs": {
     "numDeTimes": 1,
-    "numDeGrupos": 4,
-    "classificadosPorGrupo": 2
+    "numDeGrupos": 1,
+    "classificadosPorGrupo": 1
   },
     "grupos": [
       {

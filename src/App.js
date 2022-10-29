@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect, useRef, Fragment } from 'react'
 import logo from './logo.svg';
 import './App.css';
 
@@ -13,10 +13,18 @@ function App() {
         let data = await response.json()
         return data
     }
-    
+
+    useEffect(() => {
+        getData().then(data => {
+            setConfigs(data["configs"])
+            setGrupos(data["grupos"])
+            setTimes(data["times"])
+        })
+    }, []) //Ocorre apenas na inicialização
+
     function setNewConfigs(e, config) {
         let newValue = e.currentTarget.value
-        if (newValue < 0) newValue = 0
+        if (newValue < 0) newValue = 0 // validação lógica
         let newConfig = JSON.parse(JSON.stringify(configs))
         if (config == "numDeTimes") {
             newConfig.numDeTimes = newValue
@@ -24,13 +32,19 @@ function App() {
             else removerTime()
         }
         if (config == "numDeGrupos") {
-            newConfig.numDeGrupos = newValue
+            if (newValue < newConfig.numDeTimes + 1) newConfig.numDeGrupos = newValue
         }
         if (config == "classificadosPorGrupo") {
             newConfig.classificadosPorGrupo = newValue
         }
         setConfigs(newConfig)
-        //console.log(configs.numDeTimes)
+    }
+
+    function setNewTimes(id, e) {
+        let newValue = e.currentTarget.value
+        let newTimes = JSON.parse(JSON.stringify(times))
+        newTimes[id].nome = newValue
+        setTimes(newTimes)
     }
 
     function criarTime() {
@@ -54,6 +68,7 @@ function App() {
         novosTimes.pop()
         setTimes(novosTimes)
     }
+
     function ConfigurarTabela(props) {
         return (
             <React.Fragment>
@@ -72,30 +87,17 @@ function App() {
             </React.Fragment>
                 )
     }
-    function ConfigurarTimes(props) {
-        console.log(times)
-        return (
-            times.map(t =>
-                <input type='text' value={t.nome} key={t.id} />
-                )
-        )
-
-    }
-
-    useEffect(() => {
-        getData().then(data => {
-            setConfigs(data["configs"])
-            setGrupos(data["grupos"])
-            setTimes(data["times"])
-        })
-    }, []) //Ocorre apenas na inicialização
-
 
     return (
         <React.Fragment>
             <ConfigurarTabela />
             <br/>
-            <ConfigurarTimes />
+            {times.map(t =>
+                <input type='text'
+                    value={t.nome}
+                    onChange={(e) => setNewTimes(t.id, e)}
+                    key={t.id} />
+            )}
         </React.Fragment>
       )
 }
