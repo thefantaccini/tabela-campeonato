@@ -14,6 +14,36 @@ function App() {
         return data
     }
 
+    function setNewConfigs(e, config) {
+        const newValue = e.currentTarget.value
+        if (newValue < 0) newValue = 0
+        let newConfig = JSON.parse(JSON.stringify(configs))
+        if (config == "numDeTimes") newConfig.numDeTimes = newValue
+        if (config == "numDeGrupos") newConfig.numDeGrupos = newValue
+        if (config == "classificadosPorGrupo") newConfig.classificadosPorGrupo = newValue
+        setConfigs(newConfig)
+        //console.log(configs.numDeTimes)
+    }
+
+    function ConfigurarTabela(props) {
+        return (
+            <React.Fragment>
+                <label>Times: </label>
+                <input type='number'
+                value={configs.numDeTimes}
+                    onChange={(e) => setNewConfigs(e,"numDeTimes")} />
+                <label>Grupos: </label>
+                <input type='number'
+                    value={configs.numDeGrupos}
+                    onChange={(e) => setNewConfigs(e,"numDeGrupos")} />
+                <label>Classificados por Grupo: </label>
+                <input type='number'
+                    value={configs.classificadosPorGrupo}
+                    onChange={(e) => setNewConfigs(e,"classificadosPorGrupo")} />
+            </React.Fragment>
+                )
+    }
+
     useEffect(() => {
         getData().then(data => {
             setConfigs(data["configs"])
@@ -23,7 +53,9 @@ function App() {
     }, []) //Ocorre apenas na inicialização
 
 
-  return null
+    return (
+        <ConfigurarTabela/>
+      )
 }
 
 export default App;
