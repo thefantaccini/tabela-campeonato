@@ -1,6 +1,6 @@
 {
     "configs": {
-    "numDeTimes": 8,
+    "numDeTimes": 1,
     "numDeGrupos": 4,
     "classificadosPorGrupo": 2
   },
@@ -21,7 +21,7 @@
     "times": [
       {
         "id": 0,
-        "nome do time": "Time 1",
+        "nome": "Time1",
         "grupo": 0,
         "pontos": 0,
         "vitorias": 0,
