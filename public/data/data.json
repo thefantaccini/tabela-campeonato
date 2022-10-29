@@ -6,16 +6,19 @@
   },
     "grupos": [
       {
-        "id": 0,
-        "times": [ 0, 1, 2, 3 ]
+        "times": [ ]
       },
       {
-        "id": 1,
-        "times": [ 0, 1, 2, 3 ]
+        "times": [ ]
       },
       {
-        "id": 2,
-        "times": [ 0, 1, 2, 3 ]
+        "times": [ ]
+      },
+      {
+        "times": [ ]
+      },
+      {
+        "times": [ ]
       }
     ],
     "times": [

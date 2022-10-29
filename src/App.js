@@ -22,14 +22,32 @@ function App() {
         })
     }, []) //Ocorre apenas na inicialização
 
+    useEffect(() => {
+        montaGruposNosTimes()
+    }, [configs])
+
+    /*Para efeito de teste*/
+    useEffect(() => {
+        console.clear()
+        console.log("---- Times ----")
+        console.log(times)
+    
+    })
+
     function setNewConfigs(e, config) {
         let newValue = e.currentTarget.value
         if (newValue < 0) newValue = 0 // validação lógica
         let newConfig = JSON.parse(JSON.stringify(configs))
         if (config == "numDeTimes") {
-            newConfig.numDeTimes = newValue
-            if (newConfig.numDeTimes > configs.numDeTimes) criarTime()
-            else removerTime()
+            
+            if (newValue > configs.numDeTimes) {
+                criarTime()
+                newConfig.numDeTimes = newValue
+            }
+            else {
+                removerTime()
+                newConfig.numDeTimes = newValue
+            }
         }
         if (config == "numDeGrupos") {
             if (newValue < newConfig.numDeTimes + 1) newConfig.numDeGrupos = newValue
@@ -87,7 +105,42 @@ function App() {
             </React.Fragment>
                 )
     }
+    function montaGruposNosTimes() {
+        const timesPorGrupo = Math.trunc(times.length / configs.numDeGrupos)
 
+        console.clear()
+
+        let posNoGrupo = 0
+        let grupo = 0
+        let newTimes = JSON.parse(JSON.stringify(times))
+        newTimes.map(t => {
+            t.grupo = grupo
+            posNoGrupo++
+            if (posNoGrupo == timesPorGrupo) {
+                posNoGrupo = 0
+                if (grupo < configs.numDeGrupos) grupo++
+            }
+        }
+        )
+        setTimes(newTimes)
+
+    }
+function Grupos() {
+
+        
+        
+        return (
+            <>
+
+            </>
+            )
+        
+    }
+    function criaGrupo(qtdTimes, primeiroTime) {
+        let ultimoInd = primeiroTime + qtdTimes
+       
+
+    }
     return (
         <React.Fragment>
             <ConfigurarTabela />
@@ -98,6 +151,7 @@ function App() {
                     onChange={(e) => setNewTimes(t.id, e)}
                     key={t.id} />
             )}
+            <Grupos/>
         </React.Fragment>
       )
 }
