@@ -1,25 +1,29 @@
 {
-    "configs": {
+  "configs": {
     "numDeTimes": 1,
     "numDeGrupos": 1,
     "classificadosPorGrupo": 1
   },
-    "grupos": [
-      {
-        "times": [ ]
-      }
+  "grupos": [
+    {
+      "id" : 0,
+      "times": []
+    }
     ],
-    "times": [
-      {
-        "id": 0,
-        "nome": "Time1",
-        "grupo": 0,
-        "pontos": 0,
-        "vitorias": 0,
-        "empates": 0,
-        "derrotas": 0,
-        "gols-pro": 0,
-        "saldo": 0
-      }
-    ]
+  "times": [
+    {
+      "id": 0,
+      "nome": "Time1",
+      "grupo": 0,
+      "pontos": 0,
+      "vitorias": 0,
+      "empates": 0,
+      "derrotas": 0,
+      "gols-pro": 0,
+      "saldo": 0
+    }
+  ],
+  "partidas": [
+
+  ]
   }

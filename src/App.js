@@ -7,6 +7,7 @@ function App() {
     const [configs, setConfigs] = useState([]);
     const [grupos, setGrupos] = useState([]);
     const [times, setTimes] = useState([]);
+    const [partidas, setPartidas] = useState([]);
 
     async function getData() {
         let response = await fetch("http://localhost:3000/data/data.json")
@@ -25,15 +26,24 @@ function App() {
     useEffect(() => {
         defineGrupos()
     }, [configs])
+    useEffect(() => {
+        criaPartidasDoGrupo()
+    }, [grupos])
+    useEffect(() => {
+        console.log("---- Partidas ----")
+        console.log(partidas)
+    }, [partidas])
 
     /*Para efeito de teste*/
     useEffect(() => {
+        /*
         console.clear()
         console.log("---- Times ----")
         console.log(times)
         console.log("---- Grupos ----")
         console.log(grupos)
-    
+        */
+         
     })
 
     function setNewConfigs(e, config) {
@@ -114,7 +124,8 @@ function App() {
             </React.Fragment>
                 )
     }
-    function defineGrupos() {
+
+    async function defineGrupos() {
         const timesPorGrupo = Math.trunc(times.length / configs.numDeGrupos)
         let posNoGrupo = 0
         let grupo = 0
@@ -123,7 +134,7 @@ function App() {
         let timesDesseGrupo = []
         newTimes.map(t => {
             t.grupo = grupo
-            timesDesseGrupo.push(t)
+            if (t.nome != null) timesDesseGrupo.push(t.id)
             posNoGrupo++
             if (newGrupos[grupo] != null) newGrupos[grupo].times = timesDesseGrupo
             if (posNoGrupo == timesPorGrupo) {
@@ -135,9 +146,9 @@ function App() {
             }
         }
         )
-        setTimes(newTimes)
-        setGrupos(newGrupos)
-
+        await setTimes(newTimes)
+        await setGrupos(newGrupos)
+        
     }
 
     function Grupos() {
@@ -147,6 +158,7 @@ function App() {
     function criarGrupo() {
         let novosGrupos = JSON.parse(JSON.stringify(grupos))
         novosGrupos.push({
+            "id": novosGrupos.length,
             "times" : []
         })
         setGrupos(novosGrupos)
@@ -157,6 +169,33 @@ function App() {
         novosGrupos.pop()
         setGrupos(novosGrupos)
     }
+
+    function criaPartidasDoGrupo() {
+        console.clear()
+        let novasPartidas = []
+        grupos.map(g => {
+            //for (let k = 1; k < g.times.length; k++)
+            console.log(g.times)
+            for (let i = 0; i < g.times.length; i++) {
+                    for (let j = i + 1; j < g.times.length; j++) {
+                    console.log("linha 177")
+                        let partida = {
+                                "grupo": g.id,                            
+                                "timeCasa": g.times[i],
+                                "timeFora": g.times[j],
+                                "GolsCasa": 0,
+                                "GolsFora": 0,
+                                "rodada": j
+                            }
+                        novasPartidas.push(partida)
+                        setPartidas(novasPartidas)
+                    }
+            }
+        }
+       )
+    }
+
+
     return (
         <React.Fragment>
             <ConfigurarTabela />
