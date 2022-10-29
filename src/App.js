@@ -23,7 +23,7 @@ function App() {
     }, []) //Ocorre apenas na inicialização
 
     useEffect(() => {
-        montaGruposNosTimes()
+        defineGrupos()
     }, [configs])
 
     /*Para efeito de teste*/
@@ -31,6 +31,8 @@ function App() {
         console.clear()
         console.log("---- Times ----")
         console.log(times)
+        console.log("---- Grupos ----")
+        console.log(grupos)
     
     })
 
@@ -39,8 +41,7 @@ function App() {
         if (newValue < 0) newValue = 0 // validação lógica
         let newConfig = JSON.parse(JSON.stringify(configs))
         if (config == "numDeTimes") {
-            
-            if (newValue > configs.numDeTimes) {
+            if (newValue > times.length) {
                 criarTime()
                 newConfig.numDeTimes = newValue
             }
@@ -50,7 +51,15 @@ function App() {
             }
         }
         if (config == "numDeGrupos") {
-            if (newValue < newConfig.numDeTimes + 1) newConfig.numDeGrupos = newValue
+            if (newValue < newConfig.numDeTimes + 1)
+                if (newValue > configs.numDeGrupos) {
+                    criarGrupo()
+                    newConfig.numDeGrupos = newValue
+                }
+                else {
+                    removerGrupo()
+                    newConfig.numDeGrupos = newValue
+                }
         }
         if (config == "classificadosPorGrupo") {
             newConfig.classificadosPorGrupo = newValue
@@ -105,41 +114,48 @@ function App() {
             </React.Fragment>
                 )
     }
-    function montaGruposNosTimes() {
+    function defineGrupos() {
         const timesPorGrupo = Math.trunc(times.length / configs.numDeGrupos)
-
-        console.clear()
-
         let posNoGrupo = 0
         let grupo = 0
         let newTimes = JSON.parse(JSON.stringify(times))
+        let newGrupos = JSON.parse(JSON.stringify(grupos))
+        let timesDesseGrupo = []
         newTimes.map(t => {
             t.grupo = grupo
+            timesDesseGrupo.push(t)
             posNoGrupo++
+            if (newGrupos[grupo] != null) newGrupos[grupo].times = timesDesseGrupo
             if (posNoGrupo == timesPorGrupo) {
                 posNoGrupo = 0
-                if (grupo < configs.numDeGrupos) grupo++
+                if (grupo < configs.numDeGrupos - 1) {
+                    timesDesseGrupo = []
+                    grupo++
+                }
             }
         }
         )
         setTimes(newTimes)
+        setGrupos(newGrupos)
 
     }
-function Grupos() {
 
-        
-        
-        return (
-            <>
-
-            </>
-            )
-        
+    function Grupos() {
+        return null
     }
-    function criaGrupo(qtdTimes, primeiroTime) {
-        let ultimoInd = primeiroTime + qtdTimes
-       
 
+    function criarGrupo() {
+        let novosGrupos = JSON.parse(JSON.stringify(grupos))
+        novosGrupos.push({
+            "times" : []
+        })
+        setGrupos(novosGrupos)
+    }
+
+    function removerGrupo() {
+        let novosGrupos = JSON.parse(JSON.stringify(grupos))
+        novosGrupos.pop()
+        setGrupos(novosGrupos)
     }
     return (
         <React.Fragment>
