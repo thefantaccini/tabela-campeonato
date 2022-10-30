@@ -30,18 +30,20 @@ function App() {
         criaPartidasDoGrupo()
     }, [grupos])
     useEffect(() => {
-        console.log("---- Partidas ----")
-        console.log(partidas)
-    }, [partidas])
+        criaPartidasDoGrupo()
+    }, [times])
+
 
     /*Para efeito de teste*/
     useEffect(() => {
         /*
-        console.clear()
+        console.clear
         console.log("---- Times ----")
         console.log(times)
         console.log("---- Grupos ----")
         console.log(grupos)
+        console.log("---- Partidas ----")
+        console.log(partidas)
         */
          
     })
@@ -134,7 +136,7 @@ function App() {
         let timesDesseGrupo = []
         newTimes.map(t => {
             t.grupo = grupo
-            if (t.nome != null) timesDesseGrupo.push(t.id)
+            if (t.nome != null) timesDesseGrupo.push(t)
             posNoGrupo++
             if (newGrupos[grupo] != null) newGrupos[grupo].times = timesDesseGrupo
             if (posNoGrupo == timesPorGrupo) {
@@ -152,8 +154,31 @@ function App() {
     }
 
     function Grupos() {
-        return null
+        return grupos.map(g => (
+            <table>
+                <td>
+                    <tr>
+                        <td>Grupo {g.id}</td>
+                        <td>V</td>
+                        <td>E</td>
+                        <td>D</td>
+                        <td>SG</td>
+                    </tr>
+                    {g.times.map(k => (
+                        <tr>
+                            <td>{k.nome}</td>
+                            <td>{k.vitorias}</td>
+                            <td>{k.empates}</td>
+                            <td>{k.derrotas}</td>
+                            <td>{k.saldo}</td>
+                       </tr>
+                    ))}
+                </td>
+            </table>
+        ))
     }
+
+
 
     function criarGrupo() {
         let novosGrupos = JSON.parse(JSON.stringify(grupos))
@@ -170,15 +195,13 @@ function App() {
         setGrupos(novosGrupos)
     }
 
+
     function criaPartidasDoGrupo() {
-        console.clear()
         let novasPartidas = []
         grupos.map(g => {
             //for (let k = 1; k < g.times.length; k++)
-            console.log(g.times)
             for (let i = 0; i < g.times.length; i++) {
                     for (let j = i + 1; j < g.times.length; j++) {
-                    console.log("linha 177")
                         let partida = {
                                 "grupo": g.id,                            
                                 "timeCasa": g.times[i],
@@ -206,7 +229,18 @@ function App() {
                     onChange={(e) => setNewTimes(t.id, e)}
                     key={t.id} />
             )}
-            <Grupos/>
+            <Grupos />
+            <br />
+            {partidas.map(p =>
+                <React.Fragment>
+                <label>{p.timeCasa.nome}</label>
+                <input type='number'/>
+                    <label>X</label>
+                    <input type='number'/>
+                    <label>{p.timeFora.nome}</label>
+                    <br/>
+                </React.Fragment>
+            )}
         </React.Fragment>
       )
 }
