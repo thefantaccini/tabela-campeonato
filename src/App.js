@@ -24,7 +24,7 @@ function App() {
     }, []) //Ocorre apenas na inicialização
 
     useEffect(() => {
-        defineGrupos()
+       defineGrupos()
     }, [configs])
     useEffect(() => {
         criaPartidasDoGrupo()
@@ -36,15 +36,17 @@ function App() {
 
     /*Para efeito de teste*/
     useEffect(() => {
-        /*
-        console.clear
+        
+        console.clear()
+        console.log("---- Configs ----")
+        console.log(configs)
         console.log("---- Times ----")
         console.log(times)
         console.log("---- Grupos ----")
         console.log(grupos)
         console.log("---- Partidas ----")
         console.log(partidas)
-        */
+        
          
     })
 
@@ -63,8 +65,8 @@ function App() {
             }
         }
         if (config == "numDeGrupos") {
-            if (newValue < newConfig.numDeTimes + 1)
-                if (newValue > configs.numDeGrupos) {
+            //if (newValue <= configs.numDeTimes)
+                if (newValue > newConfig.numDeGrupos) {
                     criarGrupo()
                     newConfig.numDeGrupos = newValue
                 }
@@ -84,8 +86,13 @@ function App() {
         let newTimes = JSON.parse(JSON.stringify(times))
         newTimes[id].nome = newValue
         setTimes(newTimes)
+        forcaAtualizao()
     }
 
+    function forcaAtualizao() {
+        let newConfigs = JSON.parse(JSON.stringify(configs))
+        setConfigs(newConfigs)
+    }
     function criarTime() {
         let novosTimes = JSON.parse(JSON.stringify(times))
         novosTimes.push({
@@ -199,10 +206,12 @@ function App() {
     function criaPartidasDoGrupo() {
         let novasPartidas = []
         grupos.map(g => {
+            let id = 0
             //for (let k = 1; k < g.times.length; k++)
             for (let i = 0; i < g.times.length; i++) {
                     for (let j = i + 1; j < g.times.length; j++) {
                         let partida = {
+                                "id": id,
                                 "grupo": g.id,                            
                                 "timeCasa": g.times[i],
                                 "timeFora": g.times[j],
@@ -212,13 +221,21 @@ function App() {
                             }
                         novasPartidas.push(partida)
                         setPartidas(novasPartidas)
+                        id++
                     }
             }
         }
        )
     }
 
-
+    function setGols(id, team, e) {
+        let newValue = e.currentTarget.value
+        let newPartidas = JSON.parse(JSON.stringify(partidas))
+        if (team == "home") newPartidas[id].GolsCasa = newValue
+        else newPartidas[id].GolsFora = newValue
+        if (newPartidas[id].GolsFora > newPartidas[id].GolsFora)
+        setPartidas(newPartidas)
+    }
     return (
         <React.Fragment>
             <ConfigurarTabela />
@@ -233,10 +250,10 @@ function App() {
             <br />
             {partidas.map(p =>
                 <React.Fragment>
-                <label>{p.timeCasa.nome}</label>
-                <input type='number'/>
+                    <label>{p.timeCasa.nome}</label>
+                    <input type='number' value={p.GolsCasa} onChange={(e) => setGols(p.id, "home", e)}/>
                     <label>X</label>
-                    <input type='number'/>
+                    <input type='number' value={p.GolsFora} onChange={(e) => setGols(p.id, "away", e)}/>
                     <label>{p.timeFora.nome}</label>
                     <br/>
                 </React.Fragment>
